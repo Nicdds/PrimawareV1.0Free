@@ -1,0 +1,261 @@
+
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "Primaware V1.0 (Free Version)",
+   LoadingTitle = "Loading Primaware Free Version",
+   LoadingSubtitle = "BY SINSIKE",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil, -- Create a custom folder for your hub/game
+      FileName = "Big Hub"
+   },
+   Discord = {
+      Enabled = false,
+      Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
+      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+   },
+   KeySystem = true, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "Key",
+      Subtitle = "The Key is : MRMADE",
+      Note = "Make Sure To Join the Discord Server!",
+      FileName = "MRMADE", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = false, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = true, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {"https://pastebin.com/raw/5ZB4ygNs"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+   }
+})
+
+local Main = Window:CreateTab("🏠Main", nil) -- Title, Image
+
+local MainSec = Main:CreateSection("Main")
+
+local Button = Main:CreateButton({
+   Name = "Join Discord",
+   Callback = function()
+	setclipboard("https://discord.gg/RgfhcT9S")
+	toclipboard("https://discord.gg/RgfhcT9S")
+	wait()
+	
+	game.StarterGui:SetCore("SendNotification",  {
+ Title = "Copyied 2 Clipboard";
+ Text = "";
+ Icon = "6562665528";
+ Duration = 5;
+ Button1 = "Ok";
+ Callback = NotificationBindable;
+})
+   end,
+})
+
+local Button = Main:CreateButton({
+   Name = "Server Hop",
+   Callback = function()
+	local PlaceID = game.PlaceId
+local AllIDs = {}
+local foundAnything = ""
+local actualHour = os.date("!*t").hour
+local Deleted = false
+local File = pcall(function()
+    AllIDs = game:GetService('HttpService'):JSONDecode(readfile("NotSameServers.json"))
+end)
+if not File then
+    table.insert(AllIDs, actualHour)
+    writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+end
+function TPReturner()
+    local Site;
+    if foundAnything == "" then
+        Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100'))
+    else
+        Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100&cursor=' .. foundAnything))
+    end
+    local ID = ""
+    if Site.nextPageCursor and Site.nextPageCursor ~= "null" and Site.nextPageCursor ~= nil then
+        foundAnything = Site.nextPageCursor
+    end
+    local num = 0;
+    for i,v in pairs(Site.data) do
+        local Possible = true
+        ID = tostring(v.id)
+        if tonumber(v.maxPlayers) > tonumber(v.playing) then
+            for _,Existing in pairs(AllIDs) do
+                if num ~= 0 then
+                    if ID == tostring(Existing) then
+                        Possible = false
+                    end
+                else
+                    if tonumber(actualHour) ~= tonumber(Existing) then
+                        local delFile = pcall(function()
+                            delfile("NotSameServers.json")
+                            AllIDs = {}
+                            table.insert(AllIDs, actualHour)
+                        end)
+                    end
+                end
+                num = num + 1
+            end
+            if Possible == true then
+                table.insert(AllIDs, ID)
+                wait()
+                pcall(function()
+                    writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+                    wait()
+                    game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceID, ID, game.Players.LocalPlayer)
+                end)
+                wait(4)
+            end
+        end
+    end
+end
+
+function Teleport()
+    while wait() do
+        pcall(function()
+            TPReturner()
+            if foundAnything ~= "" then
+                TPReturner()
+            end
+        end)
+    end
+end
+
+-- If you'd like to use a script before server hopping (Like a Automatic Chest collector you can put the Teleport() after it collected everything.
+Teleport()
+   end,
+})
+
+local Button = Main:CreateButton({
+   Name = "Rejoin",
+   Callback = function()
+	local tpservice= game:GetService("TeleportService")
+local plr = game.Players.LocalPlayer
+
+tpservice:Teleport(game.PlaceId, plr)
+   end,
+})
+
+local Button = Main:CreateButton({
+   Name = "Credits!",
+   Callback = function()
+	game.StarterGui:SetCore("SendNotification",  {
+ Title = "Made by: SINSIKE";
+ Text = "Helper: Bugs!";
+ Icon = "";
+ Duration = 5000000000000000000000000000000000000000000000;
+ Button1 = "Ok";
+ Callback = NotificationBindable;
+})
+   end,
+})
+
+local Legit = Window:CreateTab("📈 Legit", nil) -- Title, Image
+
+local Combat = Legit:CreateSection("Combat")
+
+local Button = Legit:CreateButton({
+   Name = "SilentAim (brokes crouch)",
+   Callback = function()
+	loadstring(game:HttpGet("https://pastebin.com/raw/eMu6HEjy", true))()
+   end,
+})
+
+local Button = Legit:CreateButton({
+   Name = "Triggerbot (brokes spec)",
+   Callback = function()
+	getgenv().FFAMode = false;
+getgenv().ReactionTime = 0;
+getgenv().ToggleBind = {Enum.KeyCode.LeftAlt};
+--[[
+FFAMode is false by default, enable this in Free-for-All only games
+LeftAlt to toggle by default
+You can replace the ToggleBind keybind with any from this list:
+https://developer.roblox.com/en-us/api-reference/enum/KeyCode
+]]
+loadstring(game:HttpGet("https://jacobies.xyz/triggerbot.lua"))()
+   end,
+})
+
+local Button = Legit:CreateButton({
+   Name = "Aimbot (hold mb2)",
+   Callback = function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Aimbot-V2/main/Resources/Scripts/Raw%20Main.lua"))()
+   end,
+})
+
+
+local Anti = Legit:CreateSection("Anti -")
+
+local Button = Legit:CreateButton({
+   Name = "Anti-Afk",
+   Callback = function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/NoTwistedHere/Roblox/main/AntiAFK.lua"))()
+   end,
+})
+
+local Button = Legit:CreateButton({
+   Name = "Anti-Aim",
+   Callback = function()
+	game:GetService("RunService").RenderStepped:Connect(function()
+game.ReplicatedStorage.Events.ControlTurn:FireServer(-math.huge, false)
+game.ReplicatedStorage.Events.ControlTurn:FireServer(math.huge, false)
+end)
+   end,
+})
+
+local Button = Legit:CreateButton({
+   Name = "Anti-Aim V2",
+   Callback = function()
+loadstring(game:HttpGet("https://pastebin.com/raw/8ZS8TWZy"))()
+   end,
+})
+
+local Button = Legit:CreateButton({
+   Name = "Anti-Kick",
+   Callback = function()
+--BROUGHT TO YOU BY RSCRIPTS.NET--
+local min_count = 2
+repeat wait() until game:IsLoaded()
+if game.PlaceId == 1480424328 or game.PlaceId == 301549746 then
+local chat
+repeat pcall(function() chat = game:GetService("Players").LocalPlayer.PlayerGui.GUI.Main.Chats end) wait() until chat
+print(chat)
+local c = coroutine.create(function()
+while wait() do
+   for i,child in pairs(chat:GetDescendants()) do
+   if child:IsA"TextLabel" then
+       repeat game:GetService"RunService".Stepped:Wait() until child.Text ~= "Label"
+       local t= child.Text:split(" ")
+if t[6] and t[7] and string.find(t[6],game.Players.LocalPlayer.Name) and (tonumber(t[7])) <= min_count then
+   game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
+   end end end end end)
+-- you can put your esp aimbot or whatever here to autoload it when you rejoin
+end
+   end,
+})
+
+local Player = Window:CreateTab("🧍‍ Player", nil) -- Title, Image
+
+local Charac = Player:CreateSection("Character")
+
+local Slider = Player:CreateSlider({
+   Name = "Fov",
+   Range = {75, 130},
+   Increment = 1,
+   Suffix = "FOV",
+   CurrentValue = 60,
+   Flag = "Fov", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+   workspace.CurrentCamera.FieldOfView = (Value)
+   getsenv(game.Players.LocalPlayer.PlayerGui.Client).fieldofview = (Value)
+   end,
+})
+
+local Rage = Window:CreateTab("💢 Rage", 4483362458) -- Title, Image
+
+local Not = Rage:CreateSection("Not Maked Yet!")
+
+local Vis = Window:CreateTab("💢 Visuals", 4483362458) -- Title, Image
+
+local Not2 = Vis:CreateSection("Not Maked Yet!")
