@@ -1,4 +1,17 @@
 
+game.StarterGui:SetCore("SendNotification",  {
+ Title = "Make Sure To Use Fluxus";
+ Text = "Or Synapse!";
+ Icon = "";
+ Duration = 5;
+ Button1 = "I dont wanna";
+ Button2 = "Ok";
+ Callback = NotificationBindable;
+})
+
+wait()
+
+
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
